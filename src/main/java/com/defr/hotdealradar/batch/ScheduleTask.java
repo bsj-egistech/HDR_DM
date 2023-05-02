@@ -14,10 +14,13 @@ public class ScheduleTask {
 
     @Scheduled(cron = "0/10 * * * * *")
     private void makeHotDealData() {
-        System.out.println("핫딜 데이터 제작");
-        System.out.println("메모리 핫딜 데이터 : " + StoredValue.hotDealData);
+        System.out.println("make hot deal data");
+        System.out.println("hot deal data in memory : " + StoredValue.hotDealData);
 
         //사이트별 크롤링 & 정제 클래스
+
+
+
 
         StoredValue.hotDealData.put("pomppu", new Object());
 
