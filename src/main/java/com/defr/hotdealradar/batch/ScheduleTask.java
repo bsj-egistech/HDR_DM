@@ -3,6 +3,9 @@ package com.defr.hotdealradar.batch;
 
 import com.defr.hotdealradar.common.StoredValue;
 import com.defr.hotdealradar.crawler.PpomppuCrawler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,7 +17,10 @@ import java.util.HashMap;
 @EnableScheduling
 public class ScheduleTask {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Autowired
+    PpomppuCrawler pCraw;
 
     @Scheduled(cron = "0/10 * * * * *")
     private void makeHotDealData() {
@@ -24,7 +30,7 @@ public class ScheduleTask {
         //사이트별 크롤링 & 정제 클래스
         //크롤링시 리스트 따로 만들지 말고 리스트 반복문 돌려서 아래 형태로 만들기
 
-        ArrayList<HashMap<String, String>> pomppuData = new ArrayList<HashMap<String, String>>();
+        /*ArrayList<HashMap<String, String>> pomppuData = new ArrayList<HashMap<String, String>>();
 
         HashMap<String, String> map0 = new HashMap<String, String>();
         map0.put("title", "제목0");
@@ -41,10 +47,14 @@ public class ScheduleTask {
         map2.put("price", "3000원");
         pomppuData.add(map2);
 
-        StoredValue.hotDealData.put("pomppu", pomppuData);
+        StoredValue.hotDealData.put("pomppu", pomppuData);*/
 
+        //System.out.println("한글");
+        //logger.info("한글");
+        StoredValue.hotDealData.put("pomppu", pCraw.crawData());
 
-        new PpomppuCrawler().crawData();
+        logger.info("hotDealData : " + StoredValue.hotDealData);
+
 
 
 
