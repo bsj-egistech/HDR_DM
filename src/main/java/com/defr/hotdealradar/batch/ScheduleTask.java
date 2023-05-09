@@ -25,7 +25,7 @@ public class ScheduleTask {
     @Scheduled(cron = "0/10 * * * * *")
     private void makeHotDealData() {
         System.out.println("make hot deal data");
-        System.out.println("hot deal data in memory : " + StoredValue.hotDealData);
+        //System.out.println("hot deal data in memory : " + StoredValue.hotDealData);
 
         //사이트별 크롤링 & 정제 클래스
         //크롤링시 리스트 따로 만들지 말고 리스트 반복문 돌려서 아래 형태로 만들기
