@@ -17,7 +17,7 @@ public class HotdealradarController {
     //핫딜 데이터를 반환
     @ResponseBody
     @RequestMapping(value = "/getHotdealData", method = RequestMethod.POST)
-    public Map getHotdealData(HttpServletRequest req, @RequestBody Map<String, Object> reqParam) {
+    public Map getHotdealData(HttpServletRequest req, @RequestBody HashMap<String, Object> reqParam) {
         System.out.println("getHotdealData");
         System.out.println("requestURL : " + req.getRequestURL());
 
