@@ -13,8 +13,21 @@ function getData() {
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(postData),
-        success: function (response) {
-            console.log(response);
+        success: function (res) {
+            console.log(res);
+            //console.log(res.pomppu);
+
+            $(res.pomppu).each(function(idx, el) {
+                //console.log(idx);
+                //console.log(el);
+
+                $("#container").append("<div class='row'>" + el.post_title + "</div>");
+
+
+            });
+                
+
+
         },
         error: function (xhr, status, error) {
             console.error(error);

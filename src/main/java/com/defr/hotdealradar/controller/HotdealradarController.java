@@ -1,5 +1,6 @@
 package com.defr.hotdealradar.controller;
 
+import com.defr.hotdealradar.common.StoredValue;
 import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
@@ -17,19 +18,17 @@ public class HotdealradarController {
     //핫딜 데이터를 반환
     @ResponseBody
     @RequestMapping(value = "/getHotdealData", method = RequestMethod.POST)
-    public Map getHotdealData(HttpServletRequest req, @RequestBody HashMap<String, Object> reqParam) {
+    public HashMap getHotdealData(HttpServletRequest req, @RequestBody HashMap<String, Object> reqParam) {
         System.out.println("getHotdealData");
         System.out.println("requestURL : " + req.getRequestURL());
 
         System.out.println("reqParam : " + reqParam);
 
-
-
-        Map result = new HashMap<String, Object>();
+        /*Map result = new HashMap<String, Object>();
         result.put("test1", "test1");
-        result.put("test2", "test2");
+        result.put("test2", "test2");*/
 
-        return result;
+        return StoredValue.hotDealData;
     }
 
 
