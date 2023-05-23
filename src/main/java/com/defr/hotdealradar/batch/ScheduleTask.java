@@ -51,16 +51,21 @@ public class ScheduleTask {
 
         //System.out.println("한글");
         //logger.info("한글");
-        StoredValue.hotDealData.put("pomppu", pCraw.crawData());
+//        StoredValue.hotDealData.put("pomppu", pCraw.crawData());
+
+        putInStoredValue(pCraw.crawData());
+
 
         logger.info("hotDealData : " + StoredValue.hotDealData);
-
-
-
-
-
     }
 
+    // 기존 값과 비교해서 중복값 없이 새로운 값만 넣도록
+    public void putInStoredValue(ArrayList putObj) {
+
+
+
+        StoredValue.hotDealData.put("pomppu", putObj);
+    }
 
 
 
