@@ -55,16 +55,50 @@ public class ScheduleTask {
 
         putInStoredValue(pCraw.crawData());
 
-
         logger.info("hotDealData : " + StoredValue.hotDealData);
     }
 
     // 기존 값과 비교해서 중복값 없이 새로운 값만 넣도록
-    public void putInStoredValue(ArrayList putObj) {
+    public void putInStoredValue(ArrayList<HashMap<String, String>> putObj) {
 
+        ArrayList<HashMap<String, String>> targetList = (ArrayList<HashMap<String, String>>) StoredValue.hotDealData.get("pomppu");
+        ArrayList<HashMap<String, String>> resultList = new ArrayList<HashMap<String, String>>();
 
+        //logger.info("targetList : " + targetList);
+
+        for(int i = 0 ; i < putObj.size() ; i++) {
+            //logger.info("putObj [" +i + "] : " + putObj.get(i));
+
+            if(targetList != null) {
+                for(HashMap<String, String> map : targetList) {
+                    boolean isPutIn = false;
+
+                    if(!map.get("post_number").equals(putObj.get(i).get("post_number"))) {
+                        logger.info("새로운 값!");
+                        isPutIn = true;
+                        resultList.add(putObj.get(i));
+                    } else {
+                        logger.info("똑같은 거닌깐 거름");
+                    }
+
+                    if(isPutIn) {
+
+                        break;
+                    }
+
+                }
+            }
+
+        }
+
+        //resultList + targetList 합쳐서 뽐뿌에 넣기
+        logger.info("resultList : " + resultList);
+        logger.info("targetList : " + targetList);
 
         StoredValue.hotDealData.put("pomppu", putObj);
+
+
+
     }
 
 
