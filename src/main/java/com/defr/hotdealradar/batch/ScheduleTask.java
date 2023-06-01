@@ -62,6 +62,7 @@ public class ScheduleTask {
     public void putInStoredValue(ArrayList<HashMap<String, String>> putObj) {
 
         ArrayList<HashMap<String, String>> targetList = (ArrayList<HashMap<String, String>>) StoredValue.hotDealData.get("pomppu");
+        ArrayList<HashMap<String, String>> newList = new ArrayList<HashMap<String, String>>();
         ArrayList<HashMap<String, String>> resultList = new ArrayList<HashMap<String, String>>();
 
         //logger.info("targetList : " + targetList);
@@ -76,29 +77,34 @@ public class ScheduleTask {
                     if(!map.get("post_number").equals(putObj.get(i).get("post_number"))) {
                         logger.info("새로운 값!");
                         isPutIn = true;
-                        resultList.add(putObj.get(i));
+                        newList.add(putObj.get(i));
                     } else {
                         logger.info("똑같은 거닌깐 거름");
                     }
 
                     if(isPutIn) {
-
                         break;
                     }
 
                 }
+            } else {
+                logger.info("기존값이 null이므로 새 값을 넣습니다.");
+                newList.add(putObj.get(i));
             }
+
+
+
 
         }
 
         //resultList + targetList 합쳐서 뽐뿌에 넣기
-        logger.info("resultList : " + resultList);
+        logger.info("newList : " + newList);
         logger.info("targetList : " + targetList);
 
-        StoredValue.hotDealData.put("pomppu", putObj);
+        resultList.addAll(newList);
+        if(targetList != null) resultList.addAll(targetList);
 
-
-
+        StoredValue.hotDealData.put("pomppu", resultList);
     }
 
 
