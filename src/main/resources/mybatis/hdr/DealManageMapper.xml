@@ -4,4 +4,13 @@
     <select id="selectDealAll" resultType="DealVo">
         select * from hdr_deal;
     </select>
+
+    <insert id="insertDeal" parameterType="DealVo">
+        insert into hdr_deal(id, number, site, title, seller)
+        values(#{id}, #{number}, #{site}, #{title}, #{seller}) on duplicate key
+        update title = #{title}, seller = #{seller};
+    </insert>
+
+
+
 </mapper>

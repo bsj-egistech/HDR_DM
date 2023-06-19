@@ -22,7 +22,7 @@ public class ScheduleTask {
     @Autowired
     PpomppuCrawler pCraw;
 
-    @Scheduled(cron = "0/10 * * * * *")
+    //@Scheduled(cron = "0/10 * * * * *")
     private void makeHotDealData() {
         System.out.println("make hot deal data");
         //System.out.println("hot deal data in memory : " + StoredValue.hotDealData);

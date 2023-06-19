@@ -17,5 +17,8 @@ public class DealManageService {
     public List<DealVo> selectDealAll() {
         return dealManageMapper.selectDealAll();
     }
+    public int insertDeal(DealVo vo) {
+        return dealManageMapper.insertDeal(vo);
+    }
 
 }

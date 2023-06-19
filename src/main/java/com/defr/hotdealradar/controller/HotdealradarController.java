@@ -56,7 +56,27 @@ public class HotdealradarController {
         return resultMap;
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/insertDeal", method = RequestMethod.POST)
+    public int insertDeal(HttpServletRequest req, @RequestBody HashMap<String, Object> reqParam) {
+        System.out.println("insertDeal");
+        System.out.println("requestURL : " + req.getRequestURL());
 
+        logger.info("reqParam : " + reqParam);
+
+        DealVo vo = new DealVo();
+        vo.setId( (String) reqParam.get("id") );
+        vo.setNumber( (String) reqParam.get("number") );
+        vo.setSite( (String) reqParam.get("site") );
+        vo.setTitle( (String) reqParam.get("title") );
+        vo.setSeller( (String) reqParam.get("seller") );
+
+        int resultCnt = dealManageService.insertDeal(vo);
+
+        logger.info("resultCnt : " + resultCnt);
+
+        return resultCnt;
+    }
 
 }
 

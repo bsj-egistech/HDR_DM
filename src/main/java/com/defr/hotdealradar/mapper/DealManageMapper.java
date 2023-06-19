@@ -9,4 +9,5 @@ import java.util.List;
 @Mapper
 public interface DealManageMapper {
     List<DealVo> selectDealAll();
+    int insertDeal(DealVo vo);
 }
