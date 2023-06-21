@@ -3,6 +3,8 @@ package com.defr.hotdealradar.batch;
 
 import com.defr.hotdealradar.common.StoredValue;
 import com.defr.hotdealradar.crawler.PpomppuCrawler;
+import com.defr.hotdealradar.service.DealManageService;
+import com.defr.hotdealradar.vo.DealVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,10 @@ public class ScheduleTask {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    PpomppuCrawler pCraw;
+    PpomppuCrawler pomppuCrawler;
+
+    @Autowired
+    DealManageService dealManageService;
 
     //@Scheduled(cron = "0/10 * * * * *")
     private void makeHotDealData() {
@@ -53,9 +58,28 @@ public class ScheduleTask {
         //logger.info("한글");
 //        StoredValue.hotDealData.put("pomppu", pCraw.crawData());
 
-        putInStoredValue(pCraw.crawData());
+        putInStoredValue(pomppuCrawler.crawData());
 
         logger.info("hotDealData : " + StoredValue.hotDealData);
+    }
+
+    @Scheduled(cron = "0/10 * * * * *")
+    private void crawDealPomppu() {
+        ArrayList<HashMap<String, String>> crawListPomppu = pomppuCrawler.crawData();
+        logger.info("crawListPomppu : " + crawListPomppu);
+        logger.info("크롤링 데이터 총 " + crawListPomppu.size() + "건");
+        
+        for(HashMap<String, String> map : crawListPomppu) {
+            DealVo vo = new DealVo();
+            vo.setId( map.get("post_number") + "_pomppu" );
+            vo.setNumber( map.get("post_number") );
+            vo.setSite( "pomppu" );
+            vo.setTitle( map.get("post_title") );
+            vo.setSeller( map.get("post_author") );
+
+            int resultCnt = dealManageService.insertDeal(vo);
+            //logger.info(resultCnt + "건 삽입/수정 완료");
+        }
     }
 
     // 기존 값과 비교해서 중복값 없이 새로운 값만 넣도록
