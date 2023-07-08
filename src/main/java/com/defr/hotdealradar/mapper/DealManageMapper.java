@@ -9,5 +9,6 @@ import java.util.List;
 @Mapper
 public interface DealManageMapper {
     List<DealVo> selectDealAll();
+    List<DealVo> selectDeal(HashMap map);
     int insertDeal(DealVo vo);
 }

@@ -1,0 +1,24 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+#wrapper {
+    width: 60%;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#header {
+    height: 10%;
+}
+
+#container {
+    height: 80%;
+}
+
+#footer {
+    height: 10%;
+}

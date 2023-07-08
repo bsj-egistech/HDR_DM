@@ -5,6 +5,10 @@
         select * from hdr_deal;
     </select>
 
+    <select id="selectDeal" parameterType="java.util.HashMap" resultType="DealVo">
+        select * from hdr_deal order by regi_date desc limit #{limit} offset #{offset};
+    </select>
+
     <insert id="insertDeal" parameterType="DealVo">
         insert into hdr_deal(id, number, site, title, seller)
         values(#{id}, #{number}, #{site}, #{title}, #{seller}) on duplicate key
