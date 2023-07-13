@@ -17,8 +17,25 @@ html, body {
 
 #container {
     height: 80%;
+    /* background-color: aliceblue; */
 }
 
 #footer {
     height: 10%;
 }
+
+.hide-scroll {
+    -ms-overflow-style: none; /* IE, Edge */
+    scrollbar-width: none; /* 파폭 */
+}
+.hide-scroll::-webkit-scrollbar {
+    display: none; /* 크롬 */
+}
+
+.text-overflow {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+

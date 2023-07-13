@@ -1,5 +1,8 @@
 package com.defr.hotdealradar.vo;
 
+import lombok.Data;
+
+@Data
 public class DealVo {
 
     private String id;
@@ -9,35 +12,11 @@ public class DealVo {
     private String title;
     private String seller;
 
-    public String getId() {
-        return id;
-    }
-    public void setId(String id) {
-        this.id = id;
-    }
-    public String getNumber() {
-        return number;
-    }
-    public void setNumber(String number) {
-        this.number = number;
-    }
-    public String getSite() {
-        return site;
-    }
-    public void setSite(String site) {
-        this.site = site;
-    }
+    private String price_ori;
+    private String price_type;
+    private String price;
 
-    public String getTitle() {
-        return title;
-    }
-    public void setTitle(String title) {
-        this.title = title;
-    }
-    public String getSeller() {
-        return seller;
-    }
-    public void setSeller(String seller) {
-        this.seller = seller;
-    }
+    private String regi_date;
+    private String author;
+    private String etc;
 }

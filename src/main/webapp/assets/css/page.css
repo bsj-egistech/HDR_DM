@@ -1,0 +1,42 @@
+#container {
+    overflow-y: scroll;
+}
+
+#deal-list {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    text-align: center;
+    line-height: 1.5em;
+    font-size: 1.1em;
+}
+
+#deal-list colgroup col:nth-child(1) { width: 10%; }
+#deal-list colgroup col:nth-child(2) { width: 5%; }
+#deal-list colgroup col:nth-child(3) { width: 50%; }
+#deal-list colgroup col:nth-child(4) { width: 10%; }
+#deal-list colgroup col:nth-child(5) { width: 10%; }
+#deal-list colgroup col:nth-child(6) { width: 15%; }
+
+#deal-list thead th {
+    padding: 10px 0;
+}
+
+#deal-list tbody td {
+    padding: 10px 0;
+}
+
+
+#deal-list thead tr {
+    background-color: #e7e7e7;
+}
+
+#deal-list tbody tr {
+    border-bottom: 1px solid #9d9d9d;
+}
+
+
+.tl { text-align: left; }
+.tc { text-align: center; }
+.tr { text-align: right; }
+
