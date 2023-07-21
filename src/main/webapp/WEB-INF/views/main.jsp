@@ -87,7 +87,31 @@
 
         </div>
 
-        <footer id="footer"></footer>
+        <footer id="footer" class="align-cc">
+            <div class="pagination">
+                <a class="page-text">
+                    <span>이전</span>
+                </a>
+                <a class="page-text current">
+                    <span>1</span>
+                </a>
+                <a class="page-text">
+                    <span>2</span>
+                </a>
+                <a class="page-text">
+                    <span>3</span>
+                </a>
+                <a class="page-text">
+                    <span>4</span>
+                </a>
+                <a class="page-text">
+                    <span>5</span>
+                </a>
+                <a class="page-text">
+                    <span>다음</span>
+                </a>
+            </div>
+        </footer>
     </div>
 
 

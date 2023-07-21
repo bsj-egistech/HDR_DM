@@ -24,6 +24,18 @@ html, body {
     height: 10%;
 }
 
+.align-tl { display: flex; align-items: flex-start; justify-content: flex-start; }
+.align-tc { display: flex; align-items: flex-start; justify-content: center; }
+.align-tr { display: flex; align-items: flex-start; justify-content: flex-end; }
+
+.align-cl { display: flex; align-items: center; justify-content: flex-start; }
+.align-cc { display: flex; align-items: center; justify-content: center; }
+.align-cr { display: flex; align-items: center; justify-content: flex-end; }
+
+.align-bl { display: flex; align-items: flex-end; justify-content: flex-start; }
+.align-bc { display: flex; align-items: flex-end; justify-content: center; }
+.align-br { display: flex; align-items: flex-end; justify-content: flex-end; }
+
 .hide-scroll {
     -ms-overflow-style: none; /* IE, Edge */
     scrollbar-width: none; /* 파폭 */
@@ -38,4 +50,10 @@ html, body {
     white-space: nowrap;
 }
 
+.page-text {
+    font-size: 1.5em;
+}
+.page-text.current {
+    font-weight: bold;
+}
 
