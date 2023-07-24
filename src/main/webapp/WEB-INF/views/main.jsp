@@ -1,5 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="com.defr.hotdealradar.vo.PagingVO"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%
+    PagingVO pagingVO = (PagingVO) request.getAttribute("pagingVO");  // new PagingVO();
+
+	int currentPage = 1;
+	if (request.getParameter("pageIdx") != null) {
+		currentPage = Integer.parseInt(request.getParameter("pageIdx"));
+	}
+	pagingVO.setCurrentPage(currentPage);
+
+	//========= pagination ===========
+	pagingVO.setEndPage( ((int) Math.ceil(pagingVO.getCurrentPage() / (double) pagingVO.getDisplayPage())) * pagingVO.getDisplayPage() );	//Math.ceil : 소수점 이하를 올림한다
+	pagingVO.setBeginPage( pagingVO.getEndPage() - (pagingVO.getDisplayPage() - 1) );
+	pagingVO.setTotalPage( (int) Math.ceil(pagingVO.getTotalCount() / (double) pagingVO.getDisplayRow()) );
+	if (pagingVO.getEndPage() > pagingVO.getTotalPage()) {
+		pagingVO.setEndPage(pagingVO.getTotalPage());
+	}
+
+%>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -89,27 +109,35 @@
 
         <footer id="footer" class="align-cc">
             <div class="pagination">
+
+                <c:set var="pageIndex" value="<%=pagingVO.getCurrentPage() %>" />
+                <c:set var="beginPage" value="<%=pagingVO.getBeginPage() %>" />
+                <c:set var="endPage" value="<%=pagingVO.getEndPage() %>" />
+                <c:set var="totalPage" value="<%=pagingVO.getTotalPage() %>" />
+                <c:set var="displayPage" value="<%=pagingVO.getDisplayPage() %>" />
+
                 <a class="page-text">
                     <span>이전</span>
                 </a>
-                <a class="page-text current">
-                    <span>1</span>
-                </a>
-                <a class="page-text">
-                    <span>2</span>
-                </a>
-                <a class="page-text">
-                    <span>3</span>
-                </a>
-                <a class="page-text">
-                    <span>4</span>
-                </a>
-                <a class="page-text">
-                    <span>5</span>
-                </a>
+
+                <c:forEach var="item" varStatus="status" begin="${ beginPage }" end="${ endPage }" step="1">
+                    <c:if test="${ pageIndex == item }">
+                        <a class="page-text current">
+                            <span>${item}</span>
+                        </a>
+                    </c:if>
+                    <c:if test="${ pageIndex != item }">
+                        <a class="page-text">
+                            <span>${item}</span>
+                        </a>
+                    </c:if>
+                </c:forEach>
+
                 <a class="page-text">
                     <span>다음</span>
                 </a>
+
+
             </div>
         </footer>
     </div>

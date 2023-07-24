@@ -2,7 +2,7 @@ package com.defr.hotdealradar.controller;
 
 import com.defr.hotdealradar.service.DealManageService;
 import com.defr.hotdealradar.vo.DealVo;
-import com.defr.hotdealradar.vo.PageVo;
+import com.defr.hotdealradar.vo.PagingVO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +34,7 @@ public class ServletController {
     }
 
     @RequestMapping("/main")
-    public ModelAndView main(HttpServletRequest request, @ModelAttribute("pagingVO") PageVo pageVo) {
+    public ModelAndView main(HttpServletRequest request, @ModelAttribute("pagingVO") PagingVO pagingVO) {
         logger.info("main page 진입");
 
         logger.info("pageIdx : " + request.getParameter("pageIdx"));
@@ -45,8 +45,10 @@ public class ServletController {
         mav.setViewName("main");
 
         HashMap map = new HashMap();
-        map.put("limit", pageVo.getDisplayRow());
-        map.put("offset", 0);
+        map.put("limit", pagingVO.getDisplayRow());
+        map.put("offset", pagingVO.getStart(pageIdx));
+
+        pagingVO.setTotalCount(200);
 
         List<DealVo> list = dealManageService.selectDeal(map);
         mav.addObject("list", list);
