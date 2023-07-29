@@ -25,7 +25,7 @@ public class ServletController {
 
     @RequestMapping("/test")
     public ModelAndView test() {
-        logger.info("test page 진입");
+        //logger.info("test page 진입");
 
         ModelAndView mav = new ModelAndView();
         mav.setViewName("test");
@@ -35,7 +35,7 @@ public class ServletController {
 
     @RequestMapping("/main")
     public ModelAndView main(HttpServletRequest request, @ModelAttribute("pagingVO") PagingVO pagingVO) {
-        logger.info("main page 진입");
+        //logger.info("main page 진입");
 
         logger.info("pageIdx : " + request.getParameter("pageIdx"));
         int pageIdx = request.getParameter("pageIdx") == null ? 1 : Integer.parseInt(request.getParameter("pageIdx"));
@@ -48,9 +48,11 @@ public class ServletController {
         map.put("limit", pagingVO.getDisplayRow());
         map.put("offset", pagingVO.getStart(pageIdx));
 
-        pagingVO.setTotalCount(200);
-
         List<DealVo> list = dealManageService.selectDeal(map);
+        int dealCnt = dealManageService.selectDealCnt();
+        logger.info("dealCnt : " + dealCnt);
+        pagingVO.setTotalCount(dealCnt);
+
         mav.addObject("list", list);
         mav.addObject("pageIdx", pageIdx);
 

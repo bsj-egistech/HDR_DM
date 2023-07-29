@@ -10,5 +10,6 @@ import java.util.List;
 public interface DealManageMapper {
     List<DealVo> selectDealAll();
     List<DealVo> selectDeal(HashMap map);
+    Integer selectDealCnt();
     int insertDeal(DealVo vo);
 }

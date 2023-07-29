@@ -32,6 +32,8 @@
 
     <link rel="stylesheet" type="text/css" href="assets/css/common.css">
     <link rel="stylesheet" type="text/css" href="assets/css/page.css">
+
+    <script src="assets/js/common.js"></script>
     <script src="assets/js/content.js"></script>
 
 
@@ -116,9 +118,14 @@
                 <c:set var="totalPage" value="<%=pagingVO.getTotalPage() %>" />
                 <c:set var="displayPage" value="<%=pagingVO.getDisplayPage() %>" />
 
-                <a class="page-text">
-                    <span>이전</span>
-                </a>
+                <c:if test="${ pageIndex > 1 }">
+                    <a class="page-text" href="javascript:gotoPage(1)">
+                        <span class="item">«</span>
+                    </a>	
+                    <a class="page-text" href="javascript:gotoPage(${ pageIndex - 1 })" >
+                        <span>이전</span>
+                    </a>
+                </c:if>
 
                 <c:forEach var="item" varStatus="status" begin="${ beginPage }" end="${ endPage }" step="1">
                     <c:if test="${ pageIndex == item }">
@@ -127,17 +134,21 @@
                         </a>
                     </c:if>
                     <c:if test="${ pageIndex != item }">
-                        <a class="page-text">
+                        <a class="page-text" href="javascript:gotoPage(${item})">
                             <span>${item}</span>
                         </a>
                     </c:if>
                 </c:forEach>
 
-                <a class="page-text">
-                    <span>다음</span>
-                </a>
-
-
+                <c:if test="${ pageIndex < totalPage }">
+                    <a class="page-text" href="javascript:gotoPage(${ pageIndex + 1 })" >
+                        <span>다음</span>
+                    </a>
+                    <!-- 끝으로 -->
+                    <a class="page-text" href="javascript:gotoPage(${ totalPage })">
+                        <span>»</span>
+                    </a> 
+                </c:if>
             </div>
         </footer>
     </div>

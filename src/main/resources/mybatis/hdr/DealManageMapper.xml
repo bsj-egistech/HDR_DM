@@ -9,6 +9,10 @@
         select * from hdr_deal order by regi_date desc limit #{limit} offset #{offset};
     </select>
 
+    <select id="selectDealCnt" resultType="java.lang.Integer">
+        select count(*) from hdr_deal;
+    </select>
+
     <insert id="insertDeal" parameterType="DealVo">
         insert into hdr_deal(id, number, site, title, seller)
         values(#{id}, #{number}, #{site}, #{title}, #{seller}) on duplicate key

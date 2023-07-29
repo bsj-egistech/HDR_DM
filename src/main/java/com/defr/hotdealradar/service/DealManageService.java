@@ -20,6 +20,9 @@ public class DealManageService {
     public List<DealVo> selectDeal(HashMap map) {
         return dealManageMapper.selectDeal(map);
     }
+    public Integer selectDealCnt() {
+        return dealManageMapper.selectDealCnt();
+    }
     public int insertDeal(DealVo vo) {
         return dealManageMapper.insertDeal(vo);
     }
