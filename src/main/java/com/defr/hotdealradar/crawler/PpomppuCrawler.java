@@ -1,5 +1,6 @@
 package com.defr.hotdealradar.crawler;
 
+import com.defr.hotdealradar.util.StringUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -54,12 +55,13 @@ public class PpomppuCrawler {
                 //logger.info("제목 : " + els.get(i).select("table tr td[valign=middle] a font").text());
                 map.put("post_title", els.get(i).select("table tr td[valign=middle] a font").text());
 
+                //11:36:54
                 //날짜
                 //logger.info("날짜 : " + els.get(i).select("td:nth-child(4) .list_vspace").text());
-                map.put("post_date", els.get(i).select("td:nth-child(4) .list_vspace").text());
+                map.put("post_date", convertDate(els.get(i).select("td:nth-child(4) .list_vspace").text()));
                 pomppuData.add(map);
             } else {
-                logger.info("게시글 번호가 없으니 이 행 제외");
+                //logger.info("게시글 번호가 없으니 이 행 제외");
             }
 
 
@@ -68,9 +70,30 @@ public class PpomppuCrawler {
         //logger.info("pomppuData : " + pomppuData);
 
         return pomppuData;
-
-
     }
+
+
+    /**
+     * 날짜 데이터 파싱
+     * 뽐뿌의 경우 크롤링한 날짜 데이터는 yyyy/MM/dd 또는 HH:mm:ss
+     * /을 1개 이상 포함 한 경우 yyyy/MM/dd 00:00:00 으로 반환
+     * :을 1개 이상 포함한 경우 yyyy/MM/dd HH:mm:ss 으로 반환
+     * @param date 크롤링한 날짜 데이터
+     * @return 파싱된 날짜 데이터
+     */
+    private String convertDate(String date) {
+        String returnDate = "";
+        if(date.indexOf("/") > -1) {
+            returnDate = date + " " + "00:00:00";
+        } else if(date.indexOf(":") > -1) {
+            returnDate = StringUtil.getDatePattern("yyyy-MM-dd") + " " + date;
+        } else {
+            returnDate = StringUtil.getDatePattern("yyyy-MM-dd HH:mm:ss");
+        }
+        return returnDate;
+    }
+
+
 
 
 

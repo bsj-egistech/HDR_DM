@@ -66,8 +66,8 @@ public class ScheduleTask {
     @Scheduled(cron = "0/10 * * * * *")
     private void crawDealPomppu() {
         ArrayList<HashMap<String, String>> crawListPomppu = pomppuCrawler.crawData();
-        logger.info("crawListPomppu : " + crawListPomppu);
-        logger.info("크롤링 데이터 총 " + crawListPomppu.size() + "건");
+        //logger.info("crawListPomppu : " + crawListPomppu);
+        //logger.info("크롤링 데이터 총 " + crawListPomppu.size() + "건");
         
         for(HashMap<String, String> map : crawListPomppu) {
             DealVo vo = new DealVo();
@@ -76,6 +76,7 @@ public class ScheduleTask {
             vo.setSite( "pomppu" );
             vo.setTitle( map.get("post_title") );
             vo.setSeller( map.get("post_author") );
+            vo.setRegi_date( map.get("post_date") );
 
             int resultCnt = dealManageService.insertDeal(vo);
             //logger.info(resultCnt + "건 삽입/수정 완료");
