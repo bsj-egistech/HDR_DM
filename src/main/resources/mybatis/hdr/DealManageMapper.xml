@@ -14,8 +14,8 @@
     </select>
 
     <insert id="insertDeal" parameterType="DealVo">
-        insert into hdr_deal(id, number, site, title, seller, regi_date)
-        values(#{id}, #{number}, #{site}, #{title}, #{seller}, #{regi_date}) on duplicate key
+        insert into hdr_deal(id, number, site, title, seller, regi_date, link)
+        values(#{id}, #{number}, #{site}, #{title}, #{seller}, #{regi_date}, #{link}) on duplicate key
         update title = #{title}, seller = #{seller};
     </insert>
 

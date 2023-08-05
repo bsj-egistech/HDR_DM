@@ -77,6 +77,7 @@ public class ScheduleTask {
             vo.setTitle( map.get("post_title") );
             vo.setSeller( map.get("post_author") );
             vo.setRegi_date( map.get("post_date") );
+            vo.setLink( map.get("post_link") );
 
             int resultCnt = dealManageService.insertDeal(vo);
             //logger.info(resultCnt + "건 삽입/수정 완료");

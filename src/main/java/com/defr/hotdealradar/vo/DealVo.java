@@ -18,5 +18,7 @@ public class DealVo {
 
     private String regi_date;
     private String author;
+    private String link;
+
     private String etc;
 }

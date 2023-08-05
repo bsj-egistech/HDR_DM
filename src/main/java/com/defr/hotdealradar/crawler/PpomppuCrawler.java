@@ -16,6 +16,11 @@ import java.util.HashMap;
 public class PpomppuCrawler {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    //https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&no=476577
+
+    String dealLinkPre = "https://www.ppomppu.co.kr/zboard/view.php?id=ppomppu&no=";
+
     //사이트 데이터 불러오기 & 정제
     public ArrayList crawData() {
         Document doc = null;
@@ -45,19 +50,17 @@ public class PpomppuCrawler {
             //값이 없는 경우 쇼핑 포럼 등 아이콘으로 들어가있음, 한번더 셀렉트 해서 이미지 alt값으로 구분
             //logger.info("글 번호 : " + els.get(i).select("td.eng.list_vspace:nth-child(1)").text());
 
+            //뽐뿌의 경우 게시글에 가격이 포합되어있는 관계로 가격항목은 NULL로 처리
             if(!els.get(i).select("td.eng.list_vspace:nth-child(1)").text().trim().equals("")) {
+                //게시글 번호
                 map.put("post_number", els.get(i).select("td.eng.list_vspace:nth-child(1)").text());
+                //게시글 링크
+                map.put("post_link", dealLinkPre + map.get("post_number"));
                 //작성자
-                //logger.info("작성자 : " + els.get(i).select(".list_name > .list_name").text());
                 map.put("post_author", els.get(i).select(".list_name > .list_name").text());
-
                 //제목
-                //logger.info("제목 : " + els.get(i).select("table tr td[valign=middle] a font").text());
                 map.put("post_title", els.get(i).select("table tr td[valign=middle] a font").text());
-
-                //11:36:54
                 //날짜
-                //logger.info("날짜 : " + els.get(i).select("td:nth-child(4) .list_vspace").text());
                 map.put("post_date", convertDate(els.get(i).select("td:nth-child(4) .list_vspace").text()));
                 pomppuData.add(map);
             } else {

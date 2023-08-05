@@ -33,6 +33,7 @@
     <link rel="stylesheet" type="text/css" href="assets/css/common.css">
     <link rel="stylesheet" type="text/css" href="assets/css/page.css">
 
+    <script src="assets/js/lib/jquery-3.7.0.min.js"></script>
     <script src="assets/js/common.js"></script>
     <script src="assets/js/content.js"></script>
 
@@ -84,7 +85,7 @@
                     </tr> -->
 
                     <c:forEach var="item" items="${list}">
-                        <tr>
+                        <tr data-link="${item.link}">
                             <td>${item.number}</td>
                             <td>${item.site}</td>
                             <td class="tl">${item.title}</td>
