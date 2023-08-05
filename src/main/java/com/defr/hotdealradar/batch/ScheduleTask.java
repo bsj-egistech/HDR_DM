@@ -3,6 +3,7 @@ package com.defr.hotdealradar.batch;
 
 import com.defr.hotdealradar.common.StoredValue;
 import com.defr.hotdealradar.crawler.PpomppuCrawler;
+import com.defr.hotdealradar.crawler.QuasarCrawler;
 import com.defr.hotdealradar.service.DealManageService;
 import com.defr.hotdealradar.vo.DealVo;
 import org.slf4j.Logger;
@@ -23,6 +24,8 @@ public class ScheduleTask {
 
     @Autowired
     PpomppuCrawler pomppuCrawler;
+    @Autowired
+    QuasarCrawler QuasarCrawler;
 
     @Autowired
     DealManageService dealManageService;
@@ -63,12 +66,15 @@ public class ScheduleTask {
         logger.info("hotDealData : " + StoredValue.hotDealData);
     }
 
-    @Scheduled(cron = "0/10 * * * * *")
+    @Scheduled(cron = "0/30 * * * * *")
     private void crawDealPomppu() {
         ArrayList<HashMap<String, String>> crawListPomppu = pomppuCrawler.crawData();
+        ArrayList<HashMap<String, String>> crawListQuasar = QuasarCrawler.crawData();
         //logger.info("crawListPomppu : " + crawListPomppu);
         //logger.info("크롤링 데이터 총 " + crawListPomppu.size() + "건");
-        
+        int resultCntPomppu = 0;
+        int resultCntQuasar = 0;
+
         for(HashMap<String, String> map : crawListPomppu) {
             DealVo vo = new DealVo();
             vo.setId( map.get("post_number") + "_pomppu" );
@@ -79,9 +85,28 @@ public class ScheduleTask {
             vo.setRegi_date( map.get("post_date") );
             vo.setLink( map.get("post_link") );
 
-            int resultCnt = dealManageService.insertDeal(vo);
+            resultCntPomppu = dealManageService.insertDeal(vo);
             //logger.info(resultCnt + "건 삽입/수정 완료");
         }
+
+        for(HashMap<String, String> map : crawListQuasar) {
+            DealVo vo = new DealVo();
+            vo.setId( map.get("post_number") + "_pomppu" );
+            vo.setNumber( map.get("post_number") );
+            vo.setSite( "pomppu" );
+            vo.setTitle( map.get("post_title") );
+            vo.setSeller( map.get("post_author") );
+            vo.setRegi_date( map.get("post_date") );
+            vo.setLink( map.get("post_link") );
+
+            resultCntQuasar = dealManageService.insertDeal(vo);
+            //logger.info(resultCnt + "건 삽입/수정 완료");
+        }
+
+        logger.info("뽐뿌 " + resultCntPomppu + " 건 삽입 / 수정 완료");
+        logger.info("퀘이사존 " + resultCntQuasar + " 건 삽입 / 수정 완료");
+
+
     }
 
     // 기존 값과 비교해서 중복값 없이 새로운 값만 넣도록
