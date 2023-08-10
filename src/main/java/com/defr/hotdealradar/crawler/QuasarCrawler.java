@@ -11,6 +11,11 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * 사용하지 않음
+ * 퀘이사존의 경우 비인가된 크롤링을 차단함.
+ * 크롤링 시행할 서버 IP에 대해 허가를 받아야 사용가능
+ */
 @Component
 public class QuasarCrawler {
 
