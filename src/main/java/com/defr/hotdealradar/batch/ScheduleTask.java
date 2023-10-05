@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -29,6 +30,8 @@ public class ScheduleTask {
 
     @Autowired
     DealManageService dealManageService;
+
+    static ArrayList<HashMap<String, String>> storedListPomppu = new ArrayList<HashMap<String, String>>();
 
     //@Scheduled(cron = "0/10 * * * * *")
     private void makeHotDealData() {
@@ -68,45 +71,70 @@ public class ScheduleTask {
 
     @Scheduled(cron = "0/30 * * * * *")
     private void crawDealPomppu() {
-        ArrayList<HashMap<String, String>> crawListPomppu = pomppuCrawler.crawData();
-        ArrayList<HashMap<String, String>> crawListQuasar = QuasarCrawler.crawData();
-        //logger.info("crawListPomppu : " + crawListPomppu);
-        //logger.info("크롤링 데이터 총 " + crawListPomppu.size() + "건");
-        int resultCntPomppu = 0;
-        int resultCntQuasar = 0;
+        logger.info("메모리 값 : " + storedListPomppu);
 
-        for(HashMap<String, String> map : crawListPomppu) {
-            DealVo vo = new DealVo();
-            vo.setId( map.get("post_number") + "_pomppu" );
-            vo.setNumber( map.get("post_number") );
-            vo.setSite( "pomppu" );
-            vo.setTitle( map.get("post_title") );
-            vo.setSeller( map.get("post_author") );
-            vo.setRegi_date( map.get("post_date") );
-            vo.setLink( map.get("post_link") );
+        if(storedListPomppu.size() == 0) {
+            logger.info("최초 메모리 적재 실행");
+            ArrayList<HashMap<String, String>> crawListPomppu = pomppuCrawler.crawData();
+            int resultCntPomppu = 0;
 
-            resultCntPomppu = dealManageService.insertDeal(vo);
-            //logger.info(resultCnt + "건 삽입/수정 완료");
+            for(HashMap<String, String> map : crawListPomppu) {
+                DealVo vo = new DealVo();
+                vo.setId( map.get("post_number") + "_pomppu" );
+                vo.setNumber( map.get("post_number") );
+                vo.setSite( "pomppu" );
+                vo.setTitle( map.get("post_title") );
+                vo.setSeller( map.get("post_author") );
+                vo.setRegi_date( map.get("post_date") );
+                vo.setLink( map.get("post_link") );
+
+                int resultCnt = dealManageService.insertDeal(vo);
+                resultCntPomppu += resultCnt;
+                storedListPomppu.add(map);
+            }
+            logger.info("뽐뿌 " + resultCntPomppu + " 건 삽입 / 수정 완료");
+        } else {
+            logger.info("기존 메모리 값과 비교적재 실행");
+            ArrayList<HashMap<String, String>> crawListPomppu = pomppuCrawler.crawData();
+            int resultCntPomppu = 0;
+            ArrayList<HashMap<String, String>> differentList = findDifferentList(storedListPomppu, crawListPomppu);
+            logger.info("비교 시 다른 값" + differentList);
+            if(differentList.size() > 0) {
+                for(HashMap<String, String> map : differentList) {
+                    DealVo vo = new DealVo();
+                    vo.setId( map.get("post_number") + "_pomppu" );
+                    vo.setNumber( map.get("post_number") );
+                    vo.setSite( "pomppu" );
+                    vo.setTitle( map.get("post_title") );
+                    vo.setSeller( map.get("post_author") );
+                    vo.setRegi_date( map.get("post_date") );
+                    vo.setLink( map.get("post_link") );
+
+                    logger.info("다른 항목 : " + map);
+
+                    int resultCnt = dealManageService.insertDeal(vo);
+                    resultCntPomppu += resultCnt;
+
+                    storedListPomppu.remove(storedListPomppu.size() - 1);
+                    storedListPomppu.add(map);
+                }
+                logger.info("뽐뿌 " + resultCntPomppu + " 건 삽입 / 수정 완료");
+            }
+
         }
 
-        for(HashMap<String, String> map : crawListQuasar) {
-            DealVo vo = new DealVo();
-            vo.setId( map.get("post_number") + "_pomppu" );
-            vo.setNumber( map.get("post_number") );
-            vo.setSite( "pomppu" );
-            vo.setTitle( map.get("post_title") );
-            vo.setSeller( map.get("post_author") );
-            vo.setRegi_date( map.get("post_date") );
-            vo.setLink( map.get("post_link") );
+    }
 
-            resultCntQuasar = dealManageService.insertDeal(vo);
-            //logger.info(resultCnt + "건 삽입/수정 완료");
+    public ArrayList<HashMap<String, String>> findDifferentList(ArrayList<HashMap<String, String>> oriList, ArrayList<HashMap<String, String>> newList) {
+        ArrayList<HashMap<String, String>> returnList = new ArrayList<HashMap<String, String>>();
+
+        for (HashMap<String, String> oriMap : oriList) {
+            if (!newList.contains(oriMap)) {
+                returnList.add(oriMap);
+            }
         }
 
-        logger.info("뽐뿌 " + resultCntPomppu + " 건 삽입 / 수정 완료");
-        logger.info("퀘이사존 " + resultCntQuasar + " 건 삽입 / 수정 완료");
-
-
+        return returnList;
     }
 
     // 기존 값과 비교해서 중복값 없이 새로운 값만 넣도록
