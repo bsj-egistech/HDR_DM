@@ -72,6 +72,7 @@ public class ScheduleTask {
     @Scheduled(cron = "0/30 * * * * *")
     private void crawDealPomppu() {
         logger.info("메모리 값 : " + storedListPomppu);
+        logger.info(storedListPomppu.size() + " 건");
 
         if(storedListPomppu.size() == 0) {
             logger.info("최초 메모리 적재 실행");
@@ -98,7 +99,9 @@ public class ScheduleTask {
             ArrayList<HashMap<String, String>> crawListPomppu = pomppuCrawler.crawData();
             int resultCntPomppu = 0;
             ArrayList<HashMap<String, String>> differentList = findDifferentList(storedListPomppu, crawListPomppu);
-            logger.info("비교 시 다른 값" + differentList);
+            logger.info("비교 시 다른 값 : " + differentList);
+            logger.info(differentList.size() + " 건");
+
             if(differentList.size() > 0) {
                 for(HashMap<String, String> map : differentList) {
                     DealVo vo = new DealVo();
@@ -128,9 +131,9 @@ public class ScheduleTask {
     public ArrayList<HashMap<String, String>> findDifferentList(ArrayList<HashMap<String, String>> oriList, ArrayList<HashMap<String, String>> newList) {
         ArrayList<HashMap<String, String>> returnList = new ArrayList<HashMap<String, String>>();
 
-        for (HashMap<String, String> oriMap : oriList) {
-            if (!newList.contains(oriMap)) {
-                returnList.add(oriMap);
+        for (HashMap<String, String> newMap : newList) {
+            if (!newList.contains(newMap)) {
+                returnList.add(newMap);
             }
         }
 
