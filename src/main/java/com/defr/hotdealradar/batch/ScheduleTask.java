@@ -117,12 +117,9 @@ public class ScheduleTask {
 
                     int resultCnt = dealManageService.insertDeal(vo);
                     resultCntPomppu += resultCnt;
-
+                    //queue로 변경필요
                     storedListPomppu.remove(storedListPomppu.size() - 1);
-                    for (int i = storedListPomppu.size() - 1; i > 0; i--) {
-                        storedListPomppu.set(i, storedListPomppu.get(i - 1));
-                    }
-                    storedListPomppu.set(0, map);
+                    storedListPomppu.add(map);
                 }
                 logger.info("뽐뿌 " + resultCntPomppu + " 건 삽입 / 수정 완료");
             }
