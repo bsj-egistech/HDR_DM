@@ -119,7 +119,10 @@ public class ScheduleTask {
                     resultCntPomppu += resultCnt;
 
                     storedListPomppu.remove(storedListPomppu.size() - 1);
-                    storedListPomppu.add(map);
+                    for (int i = storedListPomppu.size() - 1; i > 0; i--) {
+                        storedListPomppu.set(i, storedListPomppu.get(i - 1));
+                    }
+                    storedListPomppu.set(0, map);
                 }
                 logger.info("뽐뿌 " + resultCntPomppu + " 건 삽입 / 수정 완료");
             }
@@ -132,7 +135,7 @@ public class ScheduleTask {
         ArrayList<HashMap<String, String>> returnList = new ArrayList<HashMap<String, String>>();
 
         for (HashMap<String, String> newMap : newList) {
-            if (!newList.contains(newMap)) {
+            if (!oriList.contains(newMap)) {
                 returnList.add(newMap);
             }
         }
