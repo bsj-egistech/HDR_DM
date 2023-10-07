@@ -2,6 +2,7 @@ package com.defr.hotdealradar.batch;
 
 
 import com.defr.hotdealradar.common.StoredValue;
+import com.defr.hotdealradar.crawler.FmkoCrawler;
 import com.defr.hotdealradar.crawler.PpomppuCrawler;
 import com.defr.hotdealradar.crawler.QuasarCrawler;
 import com.defr.hotdealradar.service.DealManageService;
@@ -26,12 +27,15 @@ public class ScheduleTask {
     @Autowired
     PpomppuCrawler pomppuCrawler;
     @Autowired
+    FmkoCrawler fmkoCrawler;
+    @Autowired
     QuasarCrawler QuasarCrawler;
 
     @Autowired
     DealManageService dealManageService;
 
     static ArrayList<HashMap<String, String>> storedListPomppu = new ArrayList<HashMap<String, String>>();
+    static ArrayList<HashMap<String, String>> storedListFmko = new ArrayList<HashMap<String, String>>();
 
     //@Scheduled(cron = "0/10 * * * * *")
     private void makeHotDealData() {
@@ -69,13 +73,14 @@ public class ScheduleTask {
         logger.info("hotDealData : " + StoredValue.hotDealData);
     }
 
+
     @Scheduled(cron = "0/30 * * * * *")
     private void crawDealPomppu() {
-        logger.info("메모리 값 : " + storedListPomppu);
+        logger.info("뽐뿌 데이터 메모리 값 : " + storedListPomppu);
         logger.info(storedListPomppu.size() + " 건");
 
         if(storedListPomppu.size() == 0) {
-            logger.info("최초 메모리 적재 실행");
+            logger.info("뽐뿌 데이터 최초 메모리 적재 실행");
             ArrayList<HashMap<String, String>> crawListPomppu = pomppuCrawler.crawData();
             int resultCntPomppu = 0;
 
@@ -95,11 +100,11 @@ public class ScheduleTask {
             }
             logger.info("뽐뿌 " + resultCntPomppu + " 건 삽입 / 수정 완료");
         } else {
-            logger.info("기존 메모리 값과 비교적재 실행");
+            logger.info("뽐뿌 데이터 기존 메모리 값과 비교적재 실행");
             ArrayList<HashMap<String, String>> crawListPomppu = pomppuCrawler.crawData();
             int resultCntPomppu = 0;
             ArrayList<HashMap<String, String>> differentList = findDifferentList(storedListPomppu, crawListPomppu);
-            logger.info("비교 시 다른 값 : " + differentList);
+            logger.info("뽐뿌 데이터 비교 시 다른 값 : " + differentList);
             logger.info(differentList.size() + " 건");
 
             if(differentList.size() > 0) {
@@ -117,15 +122,70 @@ public class ScheduleTask {
 
                     int resultCnt = dealManageService.insertDeal(vo);
                     resultCntPomppu += resultCnt;
-                    //queue로 변경필요
+                    // 메모리 리스트 자체를 크롤링해온 리스트로 변경하기
                     storedListPomppu.remove(storedListPomppu.size() - 1);
                     storedListPomppu.add(map);
                 }
                 logger.info("뽐뿌 " + resultCntPomppu + " 건 삽입 / 수정 완료");
             }
-
         }
+    }
 
+    @Scheduled(cron = "0/20 * * * * *")
+    private void crawDealFmko() {
+        logger.info("펨코 데이터 메모리 값 : " + storedListFmko);
+        logger.info(storedListFmko.size() + " 건");
+
+        if(storedListFmko.size() == 0) {
+            logger.info("펨코 데이터 최초 메모리 적재 실행");
+            ArrayList<HashMap<String, String>> crawListPomppu = fmkoCrawler.crawData();
+            int resultCntPomppu = 0;
+
+            for(HashMap<String, String> map : crawListPomppu) {
+                DealVo vo = new DealVo();
+                vo.setId( map.get("post_number") + "_fmko" );
+                vo.setNumber( map.get("post_number") );
+                vo.setSite( "fmko" );
+                vo.setTitle( map.get("post_title") );
+                vo.setSeller( map.get("post_author") );
+                vo.setRegi_date( map.get("post_date") );
+                vo.setLink( map.get("post_link") );
+
+                int resultCnt = dealManageService.insertDeal(vo);
+                resultCntPomppu += resultCnt;
+                storedListFmko.add(map);
+            }
+            logger.info("펨코 " + resultCntPomppu + " 건 삽입 / 수정 완료");
+        } else {
+            logger.info("펨코 데이터 기존 메모리 값과 비교적재 실행");
+            ArrayList<HashMap<String, String>> crawListPomppu = fmkoCrawler.crawData();
+            int resultCntPomppu = 0;
+            ArrayList<HashMap<String, String>> differentList = findDifferentList(storedListFmko, crawListPomppu);
+            logger.info("펨코 데이터 비교 시 다른 값 : " + differentList);
+            logger.info(differentList.size() + " 건");
+
+            if(differentList.size() > 0) {
+                for(HashMap<String, String> map : differentList) {
+                    DealVo vo = new DealVo();
+                    vo.setId( map.get("post_number") + "_fmko" );
+                    vo.setNumber( map.get("post_number") );
+                    vo.setSite( "fmko" );
+                    vo.setTitle( map.get("post_title") );
+                    vo.setSeller( map.get("post_author") );
+                    vo.setRegi_date( map.get("post_date") );
+                    vo.setLink( map.get("post_link") );
+
+                    logger.info("다른 항목 : " + map);
+
+                    int resultCnt = dealManageService.insertDeal(vo);
+                    resultCntPomppu += resultCnt;
+                    //queue로 변경필요
+                    storedListFmko.remove(storedListFmko.size() - 1);
+                    storedListFmko.add(map);
+                }
+                logger.info("펨코 " + resultCntPomppu + " 건 삽입 / 수정 완료");
+            }
+        }
     }
 
     public ArrayList<HashMap<String, String>> findDifferentList(ArrayList<HashMap<String, String>> oriList, ArrayList<HashMap<String, String>> newList) {
