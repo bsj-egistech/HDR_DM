@@ -122,10 +122,8 @@ public class ScheduleTask {
 
                     int resultCnt = dealManageService.insertDeal(vo);
                     resultCntPomppu += resultCnt;
-                    // 메모리 리스트 자체를 크롤링해온 리스트로 변경하기
-                    storedListPomppu.remove(storedListPomppu.size() - 1);
-                    storedListPomppu.add(map);
                 }
+                storedListPomppu = crawListPomppu;
                 logger.info("뽐뿌 " + resultCntPomppu + " 건 삽입 / 수정 완료");
             }
         }
@@ -138,10 +136,10 @@ public class ScheduleTask {
 
         if(storedListFmko.size() == 0) {
             logger.info("펨코 데이터 최초 메모리 적재 실행");
-            ArrayList<HashMap<String, String>> crawListPomppu = fmkoCrawler.crawData();
+            ArrayList<HashMap<String, String>> crawListFmko = fmkoCrawler.crawData();
             int resultCntPomppu = 0;
 
-            for(HashMap<String, String> map : crawListPomppu) {
+            for(HashMap<String, String> map : crawListFmko) {
                 DealVo vo = new DealVo();
                 vo.setId( map.get("post_number") + "_fmko" );
                 vo.setNumber( map.get("post_number") );
@@ -158,9 +156,9 @@ public class ScheduleTask {
             logger.info("펨코 " + resultCntPomppu + " 건 삽입 / 수정 완료");
         } else {
             logger.info("펨코 데이터 기존 메모리 값과 비교적재 실행");
-            ArrayList<HashMap<String, String>> crawListPomppu = fmkoCrawler.crawData();
+            ArrayList<HashMap<String, String>> crawListFmko = fmkoCrawler.crawData();
             int resultCntPomppu = 0;
-            ArrayList<HashMap<String, String>> differentList = findDifferentList(storedListFmko, crawListPomppu);
+            ArrayList<HashMap<String, String>> differentList = findDifferentList(storedListFmko, crawListFmko);
             logger.info("펨코 데이터 비교 시 다른 값 : " + differentList);
             logger.info(differentList.size() + " 건");
 
@@ -179,10 +177,8 @@ public class ScheduleTask {
 
                     int resultCnt = dealManageService.insertDeal(vo);
                     resultCntPomppu += resultCnt;
-                    //queue로 변경필요
-                    storedListFmko.remove(storedListFmko.size() - 1);
-                    storedListFmko.add(map);
                 }
+                storedListFmko = crawListFmko;
                 logger.info("펨코 " + resultCntPomppu + " 건 삽입 / 수정 완료");
             }
         }
